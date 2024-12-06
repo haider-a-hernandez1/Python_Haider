@@ -148,26 +148,103 @@
 # ejemplo 9 
 
 
+# import matplotlib.pyplot as plt
+
+# # Datos de población por continentes (en millones)
+# continentes = ["Asia", "África", "Europa", "América", "Oceanía", "Antártida"]
+# poblacion_continentes = [4600, 1400, 750, 1000, 42, 6.01]  # Población estimada en millones
+
+# # Crear el gráfico circular
+# plt.figure(figsize=(8, 8))  # Ajustar el tamaño del gráfico
+# plt.pie(
+#     poblacion_continentes,
+#     labels=continentes,
+#     autopct="%1.1f%%",  # Mostrar porcentajes
+#     startangle=140,  # Ángulo de inicio
+#     colors=plt.cm.Paired.colors,  # Usar una paleta de colores diferente
+#     wedgeprops={'edgecolor': 'black'}  # Bordes para mayor visibilidad
+# )
+
+# # Agregar título
+# plt.title("Distribución de la población mundial por continentes (2023)", fontsize=14)
+# plt.show()
+
+
+# ejemplo 10
+
+
+# import pandas as pd
+# import matplotlib.pyplot as plt
+
+# # Cargar el archivo CSV
+# df = pd.read_csv('orders.csv')
+
+# # Convertir las columnas de fecha a formato datetime
+# df["Order Date"] = pd.to_datetime(df["Order Date"], errors='coerce')
+# df["Ship Date"] = pd.to_datetime(df["Ship Date"], errors='coerce')
+
+# # Crear nuevas columnas para mes, año y día
+# df["dt_month"] = df["Order Date"].dt.month
+# df["dt_year"] = df["Order Date"].dt.year
+# df["dt_dia"] = df["Order Date"].dt.day
+
+# # Mostrar las primeras filas del DataFrame para verificar que se cargó correctamente
+# print(df.head())
+
+# # Si deseas hacer un gráfico, por ejemplo, por cantidad de pedidos por mes:
+# orders_per_month = df.groupby("dt_month").size()
+
+# # Crear el gráfico
+# plt.figure(figsize=(10, 6))
+# orders_per_month.plot(kind='bar', color='skyblue')
+# plt.title("Cantidad de Pedidos por Mes")
+# plt.xlabel("Mes")
+# plt.ylabel("Número de Pedidos")
+# plt.xticks(rotation=0)
+# plt.show()
+
+
+
+# ejemplo 11   totalrevenue by year
+
+
+
+import pandas as pd
 import matplotlib.pyplot as plt
 
-# Datos de población por continentes (en millones)
-continentes = ["Asia", "África", "Europa", "América", "Oceanía", "Antártida"]
-poblacion_continentes = [4600, 1400, 750, 1000, 42, 6.01]  # Población estimada en millones
+# Cargar el archivo CSV
+df = pd.read_csv('orders.csv')
 
-# Crear el gráfico circular
-plt.figure(figsize=(8, 8))  # Ajustar el tamaño del gráfico
-plt.pie(
-    poblacion_continentes,
-    labels=continentes,
-    autopct="%1.1f%%",  # Mostrar porcentajes
-    startangle=140,  # Ángulo de inicio
-    colors=plt.cm.Paired.colors,  # Usar una paleta de colores diferente
-    wedgeprops={'edgecolor': 'black'}  # Bordes para mayor visibilidad
-)
+# Convertir las fechas a datetime
+df["Order Date"] = pd.to_datetime(df["Order Date"])
 
-# Agregar título
-plt.title("Distribución de la población mundial por continentes (2023)", fontsize=14)
+# Extraer el año de la fecha de la orden
+df["dt_year"] = df["Order Date"].dt.year
+
+# Agrupar por año y calcular el total de ventas por año (suma de 'Amount')
+df_sales_by_year = df.groupby('dt_year')['Amount'].sum()
+
+# Mostrar el DataFrame resultante
+print(df_sales_by_year)
+
+# Graficar el total de ventas por año
+plt.figure(figsize=(10, 6))
+df_sales_by_year.plot(kind='bar', color='skyblue')
+plt.title('Total Revenue by Year')
+plt.xlabel('Year')
+plt.ylabel('Total Revenue ($)')
+plt.xticks(rotation=45)
+plt.tight_layout()
 plt.show()
 
 
 
+#comando para verficar las columnas del archivo:
+
+# import pandas as pd
+
+# # Cargar el archivo CSV
+# df = pd.read_csv('orders.csv')
+
+# # Ver las columnas del archivo CSV
+# print(df.columns)
