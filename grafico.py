@@ -209,33 +209,33 @@
 
 
 
-import pandas as pd
-import matplotlib.pyplot as plt
+# import pandas as pd
+# import matplotlib.pyplot as plt
 
-# Cargar el archivo CSV
-df = pd.read_csv('orders.csv')
+# # Cargar el archivo CSV
+# df = pd.read_csv('orders.csv')
 
-# Convertir las fechas a datetime
-df["Order Date"] = pd.to_datetime(df["Order Date"])
+# # Convertir las fechas a datetime
+# df["Order Date"] = pd.to_datetime(df["Order Date"])
 
-# Extraer el año de la fecha de la orden
-df["dt_year"] = df["Order Date"].dt.year
+# # Extraer el año de la fecha de la orden
+# df["dt_year"] = df["Order Date"].dt.year
 
-# Agrupar por año y calcular el total de ventas por año (suma de 'Amount')
-df_sales_by_year = df.groupby('dt_year')['Amount'].sum()
+# # Agrupar por año y calcular el total de ventas por año (suma de 'Amount')
+# df_sales_by_year = df.groupby('dt_year')['Amount'].sum()
 
-# Mostrar el DataFrame resultante
-print(df_sales_by_year)
+# # Mostrar el DataFrame resultante
+# print(df_sales_by_year)
 
-# Graficar el total de ventas por año
-plt.figure(figsize=(10, 6))
-df_sales_by_year.plot(kind='bar', color='skyblue')
-plt.title('Total Revenue by Year')
-plt.xlabel('Year')
-plt.ylabel('Total Revenue ($)')
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+# # Graficar el total de ventas por año
+# plt.figure(figsize=(10, 6))
+# df_sales_by_year.plot(kind='bar', color='skyblue')
+# plt.title('Total Revenue by Year')
+# plt.xlabel('Year')
+# plt.ylabel('Total Revenue ($)')
+# plt.xticks(rotation=45)
+# plt.tight_layout()
+# plt.show()
 
 
 
@@ -248,3 +248,53 @@ plt.show()
 
 # # Ver las columnas del archivo CSV
 # print(df.columns)
+
+
+
+# primer consulta hospital : Distribución por Género de las Consultas
+
+
+# import pandas as pd
+# import matplotlib.pyplot as plt
+
+# # Cargar los datos desde el archivo CSV
+# data = pd.read_csv('hospital.csv')
+
+# # Contar consultas por género
+# gender_count = data['GENERO'].value_counts()
+
+# # Crear el gráfico
+# plt.figure(figsize=(8, 6))  # Ajustar el tamaño del gráfico
+# gender_count.plot(kind='bar', color=['skyblue', 'pink'], edgecolor='black')
+
+# # Añadir títulos y etiquetas
+# plt.title('Distribución de Consultas por Género', fontsize=16)
+# plt.xlabel('Género', fontsize=14)
+# plt.ylabel('Cantidad de Consultas', fontsize=14)
+
+# # Añadir etiquetas de valores sobre las barras
+# for i, value in enumerate(gender_count):
+#     plt.text(i, value + 0.5, str(value), ha='center', fontsize=12)
+
+# # Mostrar el gráfico
+# plt.tight_layout()
+# plt.show()
+
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Contar consultas por género
+gender_count = data['GENERO'].value_counts()
+
+# Gráfico
+gender_count.plot(kind='bar', color=['skyblue', 'pink'])
+plt.title('Distribución de Consultas por Género')
+plt.xlabel('Género')
+plt.ylabel('Cantidad de Consultas')
+plt.show()
