@@ -121,24 +121,53 @@
 # ejemplo 8 Grafico de poblacion durante los ultomos 20 años
 
 
+# import matplotlib.pyplot as plt
+
+# # Datos de población de 8 países (en millones, por ejemplo)
+# paises = ["China", "India", "Estados Unidos", "Indonesia", "Pakistán", "Brasil", "Nigeria", "Bangladesh"]
+# poblacion = [1444, 1406, 331, 276, 240, 216, 223, 173]  # Población aproximada en millones
+
+# # Crear el gráfico circular
+# plt.figure(figsize=(8, 8))  # Ajustar el tamaño del gráfico
+# plt.pie(
+#     poblacion,
+#     labels=paises,
+#     autopct="%1.1f%%",  # Mostrar porcentajes
+#     startangle=140,  # Ángulo de inicio
+#     colors=plt.cm.tab10.colors,  # Usar una paleta de colores diferente
+#     wedgeprops={'edgecolor': 'black'}  # Bordes para mayor visibilidad
+# )
+
+# # Agregar título
+# plt.title("Comparación de población entre 8 países (2023)", fontsize=14)
+# plt.show()
+
+
+
+
+# ejemplo 9 
+
+
 import matplotlib.pyplot as plt
 
-# Datos de población de 8 países (en millones, por ejemplo)
-paises = ["China", "India", "Estados Unidos", "Indonesia", "Pakistán", "Brasil", "Nigeria", "Bangladesh"]
-poblacion = [1444, 1406, 331, 276, 240, 216, 223, 173]  # Población aproximada en millones
+# Datos de población por continentes (en millones)
+continentes = ["Asia", "África", "Europa", "América", "Oceanía", "Antártida"]
+poblacion_continentes = [4600, 1400, 750, 1000, 42, 6.01]  # Población estimada en millones
 
 # Crear el gráfico circular
 plt.figure(figsize=(8, 8))  # Ajustar el tamaño del gráfico
 plt.pie(
-    poblacion,
-    labels=paises,
+    poblacion_continentes,
+    labels=continentes,
     autopct="%1.1f%%",  # Mostrar porcentajes
     startangle=140,  # Ángulo de inicio
-    colors=plt.cm.tab10.colors,  # Usar una paleta de colores diferente
+    colors=plt.cm.Paired.colors,  # Usar una paleta de colores diferente
     wedgeprops={'edgecolor': 'black'}  # Bordes para mayor visibilidad
 )
 
 # Agregar título
-plt.title("Comparación de población entre 8 países (2023)", fontsize=14)
+plt.title("Distribución de la población mundial por continentes (2023)", fontsize=14)
 plt.show()
+
+
 
