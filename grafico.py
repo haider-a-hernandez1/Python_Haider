@@ -251,35 +251,11 @@
 
 
 
-# primer consulta hospital : Distribución por Género de las Consultas
 
 
-# import pandas as pd
-# import matplotlib.pyplot as plt
 
-# # Cargar los datos desde el archivo CSV
-# data = pd.read_csv('hospital.csv')
 
-# # Contar consultas por género
-# gender_count = data['GENERO'].value_counts()
-
-# # Crear el gráfico
-# plt.figure(figsize=(8, 6))  # Ajustar el tamaño del gráfico
-# gender_count.plot(kind='bar', color=['skyblue', 'pink'], edgecolor='black')
-
-# # Añadir títulos y etiquetas
-# plt.title('Distribución de Consultas por Género', fontsize=16)
-# plt.xlabel('Género', fontsize=14)
-# plt.ylabel('Cantidad de Consultas', fontsize=14)
-
-# # Añadir etiquetas de valores sobre las barras
-# for i, value in enumerate(gender_count):
-#     plt.text(i, value + 0.5, str(value), ha='center', fontsize=12)
-
-# # Mostrar el gráfico
-# plt.tight_layout()
-# plt.show()
-
+# 1)primer consulta hospital : consultas Género enero - junio 2024
 
 
 
@@ -289,12 +265,532 @@ import matplotlib.pyplot as plt
 # Cargar los datos
 data = pd.read_csv('hospital.csv')
 
-# Contar consultas por género
-gender_count = data['GENERO'].value_counts()
+# Filtrar datos del año 2024 y meses de enero a junio
+data_2024 = data[(data['ANO DE LA CONSULTA'] == 2024) & 
+                 (data['MES DE LA CONSULTA'].isin(['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']))]
 
-# Gráfico
-gender_count.plot(kind='bar', color=['skyblue', 'pink'])
-plt.title('Distribución de Consultas por Género')
-plt.xlabel('Género')
-plt.ylabel('Cantidad de Consultas')
+# Contar las consultas por género y mes
+consultas_genero = data_2024.groupby(['MES DE LA CONSULTA', 'GENERO']).size().unstack()
+
+# Ordenar los meses correctamente
+meses_ordenados = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']
+consultas_genero = consultas_genero.reindex(meses_ordenados)
+
+# Crear el gráfico de barras
+consultas_genero.plot(kind='bar', figsize=(10, 6), color=['skyblue', 'pink'], edgecolor='black')
+
+# Personalización del gráfico
+plt.title('Consultas Realizadas (Enero - Junio 2024) por Género', fontsize=16)
+plt.xlabel('Mes de la Consulta', fontsize=14)
+plt.ylabel('Cantidad de Consultas', fontsize=14)
+plt.legend(title='Género', labels=['Masculino', 'Femenino'])
+
+# Etiquetas precisas sobre las barras
+for i in range(len(consultas_genero)):
+    if 'MASCULINO' in consultas_genero.columns:
+        plt.text(i - 0.15, consultas_genero.iloc[i]['MASCULINO'] + 0.5, 
+                 str(int(consultas_genero.iloc[i]['MASCULINO'])), 
+                 fontsize=10, ha='center', color='blue')
+    if 'FEMENINO' in consultas_genero.columns:
+        plt.text(i + 0.15, consultas_genero.iloc[i]['FEMENINO'] + 0.5, 
+                 str(int(consultas_genero.iloc[i]['FEMENINO'])), 
+                 fontsize=10, ha='center', color='red')
+
+# Ajustar el diseño
+plt.xticks(rotation=45)
+plt.tight_layout()
 plt.show()
+
+
+
+#1.1 
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Filtrar datos del año 2024 y meses de enero a junio
+data_2024 = data[(data['ANO DE LA CONSULTA'] == 2024) & 
+                 (data['MES DE LA CONSULTA'].isin(['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']))]
+
+# Contar las consultas por género y mes
+consultas_genero = data_2024.groupby(['MES DE LA CONSULTA', 'GENERO']).size().unstack()
+
+# Ordenar los meses correctamente
+meses_ordenados = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']
+consultas_genero = consultas_genero.reindex(meses_ordenados)
+
+# Crear el gráfico de barras
+ax = consultas_genero.plot(kind='bar', figsize=(10, 6), color=['skyblue', 'pink'], edgecolor='black')
+
+# Personalización del gráfico
+plt.title('Consultas Realizadas (Enero - Junio 2024) por Género', fontsize=16)
+plt.xlabel('Mes de la Consulta', fontsize=14)
+plt.ylabel('Cantidad de Consultas', fontsize=14)
+plt.legend(title='Género', labels=['Masculino', 'Femenino'])
+
+# Añadir los valores dentro de las barras
+for i in range(len(consultas_genero)):
+    if 'MASCULINO' in consultas_genero.columns:
+        plt.text(i - 0.15, consultas_genero.iloc[i]['MASCULINO'] + 0.5, 
+                 str(int(consultas_genero.iloc[i]['MASCULINO'])), 
+                 fontsize=10, ha='center', color='blue', fontweight='bold')
+    if 'FEMENINO' in consultas_genero.columns:
+        plt.text(i + 0.15, consultas_genero.iloc[i]['FEMENINO'] + 0.5, 
+                 str(int(consultas_genero.iloc[i]['FEMENINO'])), 
+                 fontsize=10, ha='center', color='red', fontweight='bold')
+
+# Ajustar el diseño para mejor visualización
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+# Mostrar el gráfico
+plt.show()
+
+
+
+
+# 2) ciclo de vida y tipo de regimen
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Filtrar datos del año 2024 y meses de enero a junio
+data_2024 = data[(data['ANO DE LA CONSULTA'] == 2024) &
+                 (data['MES DE LA CONSULTA'].isin(['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']))]
+
+# Tabla de conteo cruzado: Ciclo de Vida vs Tipo de Régimen
+cycle_vs_regimen = pd.crosstab(data_2024['CICLO DE VIDA'], data_2024['REGIMEN'])
+
+# Crear el gráfico de barras apiladas
+cycle_vs_regimen.plot(kind='bar', stacked=True, colormap='viridis', figsize=(10, 6), edgecolor='black')
+
+# Personalización del gráfico
+plt.title('Ciclo de Vida por Tipo de Régimen (Enero - Junio 2024)', fontsize=16)
+plt.xlabel('Ciclo de Vida', fontsize=14)
+plt.ylabel('Cantidad de Consultas', fontsize=14)
+plt.legend(title='Régimen', title_fontsize=12, fontsize=10, loc='upper right')
+
+# Etiquetas precisas sobre las barras
+for i, bar_group in enumerate(cycle_vs_regimen.iterrows()):
+    total_values = bar_group[1]
+    cumulative_height = 0
+    for value in total_values:
+        if value > 0:  # Mostrar solo si hay valores
+            plt.text(i, cumulative_height + value / 2, str(value),
+                     ha='center', va='center', fontsize=9, color='white', fontweight='bold')
+            cumulative_height += value
+
+# Ajustar diseño
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+
+
+# 3) consultas por genero enero a junio 2024 (grafica lineas)
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Imprimir las columnas para verificar el nombre correcto
+print("Nombres de las columnas:", data.columns)
+
+# Asegurarse de que la columna tenga el nombre correcto
+data.columns = data.columns.str.strip()  # Eliminar espacios en blanco
+
+# Filtrar solo las consultas del año 2024
+data_2024 = data[data['ANO DE LA CONSULTA'] == 2024]
+
+# Filtrar solo los meses de enero a junio
+months_first_half = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']
+data_2024_first_half = data_2024[data_2024['MES DE LA CONSULTA'].isin(months_first_half)]
+
+# Contar consultas por mes y género (masculino y femenino)
+gender_month_count = pd.crosstab(data_2024_first_half['MES DE LA CONSULTA'], data_2024_first_half['GENERO'])
+
+# Ordenar los meses según la lista definida
+gender_month_count = gender_month_count.reindex(months_first_half, fill_value=0)
+
+# Gráfico de líneas (latido de frecuencia cardíaca)
+plt.figure(figsize=(10, 6))
+plt.plot(gender_month_count.index, gender_month_count['MASCULINO'], label='Masculino', marker='o', color='blue', linestyle='-', linewidth=2, markersize=8)
+plt.plot(gender_month_count.index, gender_month_count['FEMENINO'], label='Femenino', marker='o', color='pink', linestyle='-', linewidth=2, markersize=8)
+
+# Personalización del gráfico
+plt.title('Distribución de Consultas por Género (Enero a Junio 2024)', fontsize=16, fontweight='bold', color='#4B0082')
+plt.xlabel('Mes', fontsize=14, fontweight='bold')
+plt.ylabel('Cantidad de Consultas', fontsize=14, fontweight='bold')
+plt.xticks(rotation=45)  # Rotar nombres de los meses
+plt.legend(title='Género', loc='upper left')
+
+# Añadir una cuadrícula para mayor visibilidad
+plt.grid(True, linestyle='--', alpha=0.7)
+
+# Estilo general de fondo
+plt.gca().set_facecolor('#F9F9F9')
+
+# Ajustar el diseño para evitar superposiciones
+plt.tight_layout()
+
+# Mostrar gráfico
+plt.show()
+
+
+# 4 consultas por edad y genero enero a junio 2024
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos desde el archivo CSV
+data = pd.read_csv('hospital.csv')
+
+# Filtrar los datos solo para el año 2024 y de enero a junio
+data_2024 = data[(data['ANO DE LA CONSULTA'] == 2024) & (data['MES DE LA CONSULTA'].isin(['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO']))]
+
+# Crear rangos de edad
+bins = [0, 18, 30, 40, 50, 60, 100]
+labels = ['Menor de 18', '18-30', '31-40', '41-50', '51-60', 'Mayor de 60']
+data_2024['RANGO DE EDAD'] = pd.cut(data_2024['EDAD'], bins=bins, labels=labels)
+
+# Contar consultas por rango de edad y género
+age_gender_count = data_2024.groupby(['RANGO DE EDAD', 'GENERO']).size().unstack(fill_value=0)
+
+# Gráfico de barras apiladas
+ax = age_gender_count.plot(kind='bar', stacked=True, color=['skyblue', 'pink'])
+
+# Añadir las cifras sobre las barras
+for p in ax.patches:
+    height = p.get_height()
+    width = p.get_width()
+    x, y = p.get_xy()  # obtiene las coordenadas del bloque de la barra
+    ax.text(x + width / 2, y + height / 2, str(int(height)), 
+            ha='center', va='center', color='black', fontsize=10)
+
+# Títulos y etiquetas
+plt.title('Consultas por Edad y Género (Enero a Junio 2024)')
+plt.xlabel('Rango de Edad')
+plt.ylabel('Cantidad de Consultas')
+plt.xticks(rotation=45)
+
+# Mostrar el gráfico
+plt.show()
+
+
+#5).1 consultas por municipio
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos desde el archivo CSV
+data = pd.read_csv('hospital.csv')
+
+# Contar consultas por municipio
+municipality_count = data['MUNICIPIO'].value_counts().head(10)  # Mostrar los 10 municipios con más consultas
+
+# Crear gráfico de barras horizontales con más espacio entre las columnas
+plt.figure(figsize=(10, 6))  # Aumentar el tamaño de la figura
+
+# Asignar colores diferentes a cada barra usando una paleta de colores
+colors = plt.cm.get_cmap('tab10', len(municipality_count))  # Usamos una paleta de 10 colores
+
+# Gráfico de barras horizontales con colores diferentes
+ax = municipality_count.plot(kind='barh', color=colors(range(len(municipality_count))))
+
+# Títulos y etiquetas
+plt.title('Top 10 de Municipios con Más Consultas (Enero a Junio 2024)', fontsize=14)
+plt.xlabel('Cantidad de Consultas', fontsize=12)
+plt.ylabel('Municipio', fontsize=12)
+
+# Añadir los valores exactos dentro de las barras
+for i, v in enumerate(municipality_count):
+    ax.text(v + 10, i, str(v), color='black', va='center', fontweight='bold')  # Ajusta el valor de '10' según sea necesario
+
+# Ajustar el diseño para más espacio entre las barras y las etiquetas
+plt.subplots_adjust(left=0.2, right=0.8, top=0.9, bottom=0.1)  # Ajustar márgenes
+
+# Rotar las etiquetas del eje Y para mayor claridad si son largas
+plt.yticks(rotation=0, fontsize=10)  # Puedes ajustar el tamaño de las etiquetas si es necesario
+
+# Mostrar el gráfico
+plt.show()
+
+
+
+#5.2 
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos desde el archivo CSV
+data = pd.read_csv('hospital.csv')
+
+# Contar consultas por municipio
+municipality_count = data['MUNICIPIO'].value_counts().head(10)  # Mostrar los 10 municipios con más consultas
+
+# Gráfico de líneas
+ax = municipality_count.plot(kind='line', marker='o', color='orange', linestyle='-', linewidth=2)
+
+# Títulos y etiquetas
+plt.title('Top 10 de Municipios con Más Consultas (Enero a Junio 2024)')
+plt.xlabel('Municipio')
+plt.ylabel('Cantidad de Consultas')
+
+# Añadir los valores exactos en cada punto de la curva
+for i, v in enumerate(municipality_count):
+    ax.text(i, v + 10, str(v), color='black', ha='center', fontweight='bold')  # Ajusta la posición del texto
+
+# Mostrar el gráfico
+plt.show()
+
+
+
+# 5.3
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos desde el archivo CSV
+data = pd.read_csv('hospital.csv')
+
+# Contar consultas por municipio
+municipality_count = data['MUNICIPIO'].value_counts().head(10)  # Mostrar los 10 municipios con más consultas
+
+# Crear la figura y el eje
+fig, ax = plt.subplots()
+
+# Gráfico de barras
+municipality_count.plot(kind='bar', color='skyblue', ax=ax, width=0.7)
+
+# Gráfico de línea (curva) sobre las barras
+municipality_count.plot(kind='line', marker='o', color='orange', ax=ax, linewidth=2, linestyle='-', markerfacecolor='red')
+
+# Añadir los valores exactos en las barras
+for i, v in enumerate(municipality_count):
+    ax.text(i, v + 10, str(v), color='black', ha='center', fontweight='bold')  # Ajustar la posición del texto
+
+# Títulos y etiquetas
+plt.title('Top 10 de Municipios con Más Consultas (Enero a Junio 2024)')
+plt.xlabel('Municipio')
+plt.ylabel('Cantidad de Consultas')
+
+# Mostrar el gráfico
+plt.show()
+
+
+# 6 grafico de cantidad de consultas por tipo de consulta
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos desde el archivo CSV
+data = pd.read_csv('hospital.csv')
+
+# Contar las consultas por tipo de consulta
+type_of_consultation_count = data['TIPO DE CONSULTA'].value_counts()  # Contar las consultas por tipo de consulta
+
+# Crear la figura y el eje
+fig, ax = plt.subplots()
+
+# Gráfico de barras
+type_of_consultation_count.plot(kind='bar', color='lightblue', ax=ax, width=0.7)
+
+# Gráfico de línea sobre las barras
+type_of_consultation_count.plot(kind='line', marker='o', color='orange', ax=ax, linewidth=2, linestyle='-', markerfacecolor='red')
+
+# Añadir los valores exactos en las barras
+for i, v in enumerate(type_of_consultation_count):
+    ax.text(i, v + 5, str(v), color='black', ha='center', fontweight='bold')  # Ajustar la posición del texto
+
+# Títulos y etiquetas
+plt.title('Cantidad de Consultas por Tipo de Consulta')
+plt.xlabel('Tipo de Consulta')
+plt.ylabel('Cantidad de Consultas')
+
+# Mostrar el gráfico
+plt.show()
+
+
+
+#6.2
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos desde el archivo CSV
+data = pd.read_csv('hospital.csv')
+
+# Contar las consultas por tipo de consulta
+type_of_consultation_count = data['TIPO DE CONSULTA'].value_counts()  # Contar las consultas por tipo de consulta
+
+# Crear la figura y el eje
+fig, ax = plt.subplots()
+
+# Gráfico de barras
+type_of_consultation_count.plot(kind='bar', color='lightblue', ax=ax, width=0.7)
+
+# Gráfico de línea sobre las barras
+type_of_consultation_count.plot(kind='line', marker='o', color='orange', ax=ax, linewidth=2, linestyle='-', markerfacecolor='red')
+
+# Añadir los valores exactos en las barras
+for i, v in enumerate(type_of_consultation_count):
+    ax.text(i, v + 5, str(v), color='black', ha='center', fontweight='bold')  # Ajustar la posición del texto
+
+# Títulos y etiquetas
+plt.title('Cantidad de Consultas por Tipo de Consulta')
+plt.xlabel('Tipo de Consulta')
+plt.ylabel('Cantidad de Consultas')
+
+# Mostrar el gráfico
+plt.show()
+
+
+# 7 edad de 60 a 105 años
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Filtrar datos para personas entre 60 y 105 años
+data_age_filtered = data[(data['EDAD'] >= 60) & (data['EDAD'] <= 105)]
+
+# Contar personas por edad y género
+age_gender_count = pd.crosstab(data_age_filtered['EDAD'], data_age_filtered['GENERO'])
+
+# Crear el gráfico de barras apiladas
+age_gender_count.plot(kind='bar', stacked=True, figsize=(12, 6), colormap='coolwarm', edgecolor='black')
+
+# Personalizar el gráfico
+plt.title('Distribución de Personas por Edad (60-105 años) y Género', fontsize=16)
+plt.xlabel('Edad', fontsize=14)
+plt.ylabel('Cantidad de Personas', fontsize=14)
+plt.legend(title='Género', title_fontsize=12, fontsize=10)
+plt.xticks(rotation=45)  # Gira las etiquetas del eje X para mayor claridad
+
+# Etiquetas precisas sobre las barras
+for i, age in enumerate(age_gender_count.index):
+    cumulative_height = 0
+    for gender in age_gender_count.columns:
+        value = age_gender_count.loc[age, gender]
+        if value > 0:  # Mostrar etiquetas solo si hay valores
+            plt.text(i, cumulative_height + value / 2, str(value),
+                     ha='center', va='center', fontsize=8, color='white', fontweight='bold')
+            cumulative_height += value
+
+# Ajustar diseño
+plt.tight_layout()
+plt.show()
+
+
+
+#  7.1
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Filtrar datos para personas entre 60 y 105 años
+data_age_filtered = data[(data['EDAD'] >= 60) & (data['EDAD'] <= 105)]
+
+# Contar personas por edad y género
+age_gender_count = pd.crosstab(data_age_filtered['EDAD'], data_age_filtered['GENERO'])
+
+# Crear el gráfico de barras
+ax = age_gender_count.plot(kind='bar', figsize=(12, 6), colormap='coolwarm', edgecolor='black')
+
+# Personalizar el gráfico
+plt.title('Distribución de Personas por Edad (60-105 años) y Género', fontsize=16)
+plt.xlabel('Edad', fontsize=14)
+plt.ylabel('Cantidad de Personas', fontsize=14)
+plt.legend(title='Género', title_fontsize=12, fontsize=10)
+plt.xticks(rotation=45)  # Gira las etiquetas del eje X para mayor claridad
+
+# Etiquetas precisas sobre las barras (mostrar el valor dentro de cada barra)
+for i, age in enumerate(age_gender_count.index):
+    # Para cada barra de la edad, obtener las barras de cada género
+    cumulative_height = 0
+    for gender in age_gender_count.columns:
+        value = age_gender_count.loc[age, gender]
+        if value > 0:  # Mostrar solo si hay valores
+            # Calcular la posición de la etiqueta dentro de la barra
+            ax.text(i, cumulative_height + value / 2, str(value),
+                    ha='center', va='center', fontsize=10, color='white', fontweight='bold')
+            cumulative_height += value
+
+# Ajustar diseño
+plt.tight_layout()
+plt.show()
+
+# sangre
+
+
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar los datos
+data = pd.read_csv('hospital.csv')
+
+# Filtrar datos para personas entre 60 y 105 años
+data_age_filtered = data[(data['EDAD'] >= 60) & (data['EDAD'] <= 105)]
+
+# Contar personas por edad y género
+age_gender_count = pd.crosstab(data_age_filtered['EDAD'], data_age_filtered['GENERO'])
+
+# Crear un gráfico de barras apiladas
+plt.figure(figsize=(14, 6))
+
+
+
+# Segundo gráfico: Barras no apiladas
+plt.subplot(1, 2, 2)
+age_gender_count.plot(kind='bar', stacked=False, colormap='coolwarm', edgecolor='black', ax=plt.gca())
+plt.title('Gráfico de Barras No Apiladas', fontsize=16)
+plt.xlabel('Edad', fontsize=14)
+plt.ylabel('Cantidad de Personas', fontsize=14)
+plt.xticks(rotation=45)
+
+# Ajustar diseño
+plt.tight_layout()
+
+# Mostrar los gráficos
+plt.show()
+
+
+
+import matplotlib.gridspec as gridspec
+
+plt.figure(figsize=(12, 6))
+grid = gridspec.GridSpec(1, 3)  # Divide la figura en 3 columnas
+ax = plt.subplot(grid[:, 1])   # Ocupa solo la columna central
+
+age_gender_count.plot(kind='bar', stacked=False, colormap='coolwarm', edgecolor='black', ax=ax)
+plt.title('Gráfico de Barras No Apiladas', fontsize=16)
+plt.xlabel('Edad', fontsize=14)
+plt.ylabel('Cantidad de Personas', fontsize=14)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+
+
